@@ -1,5 +1,6 @@
 package com.e.birdviewtest
 
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -13,17 +14,10 @@ class MainActivity : AppCompatActivity() {
         val myAsync: GetDataAsyctask = GetDataAsyctask()
         myAsync.execute("oily", "1")
 
-        val img: ArrayList<Int> = arrayListOf()
-        img.add(R.drawable.c)
-
-        val title: ArrayList<String> = arrayListOf()
-        title.add("title01")
-
-        val price: ArrayList<String> = arrayListOf()
-        price.add("price01")
+        //TODO 전역변수에 있는 데이터 사용해서 gridAdapte생성자에 전달
 
         val gridAdapte: GridViewAdapter =
-            GridViewAdapter(applicationContext, R.layout.grid_item, img, title, price)
+            GridViewAdapter(applicationContext, R.layout.grid_item, GlobalVariable.mainImg, GlobalVariable.mainTitle, GlobalVariable.mainPrice)
 
         myGridView.adapter = gridAdapte
     }
