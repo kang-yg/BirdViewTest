@@ -10,13 +10,14 @@ import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.grid_item.view.*
 
-class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap>, _title : ArrayList<String>, _price : ArrayList<String>) : BaseAdapter() {
+class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap>, _title : ArrayList<String>, _price : ArrayList<String>, _id : ArrayList<Int>) : BaseAdapter() {
     lateinit var context : Context
     var layout : Int = 0
     lateinit var inf : LayoutInflater
     lateinit var img : ArrayList<Bitmap>
     lateinit var title : ArrayList<String>
     lateinit var price : ArrayList<String>
+    lateinit var id : ArrayList<Int>
 
 
     init {
@@ -26,6 +27,7 @@ class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap
         img = _img
         title = _title
         price = _price
+        id = _id
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {

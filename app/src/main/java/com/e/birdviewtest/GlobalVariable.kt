@@ -9,5 +9,6 @@ class GlobalVariable : Application() {
         var mainImg : ArrayList<Bitmap> = arrayListOf()
         var mainTitle : ArrayList<String> = arrayListOf()
         var mainPrice : ArrayList<String> = arrayListOf()
+        var mainId : ArrayList<Int> = arrayListOf()
     }
 }

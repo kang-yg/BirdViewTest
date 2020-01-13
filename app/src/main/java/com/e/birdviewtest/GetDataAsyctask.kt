@@ -14,6 +14,7 @@ import java.io.InputStream
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.concurrent.TimeUnit
 
 
 class GetDataAsyctask : AsyncTask<String, Any, Any> {
@@ -29,7 +30,11 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         var skinType: String = p0[0].toString()
         var page: Int = p0[1]!!.toInt()
 
-        val client: OkHttpClient = OkHttpClient()
+        var timeBuilder : okhttp3.OkHttpClient.Builder = OkHttpClient.Builder()
+        timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
+        timeBuilder.writeTimeout(10000, TimeUnit.SECONDS)
+        val client: OkHttpClient = timeBuilder.build()
+        client.connectTimeoutMillis()
         val request: Request = Request.Builder()
             .url("https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products?skin_type=${skinType}&page=${page}")
             .build()
@@ -40,7 +45,6 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
             e.printStackTrace()
         }
 
-        //TODO URL에서 이미지 가져오기 https://stackoverflow.com/questions/5776851/load-image-from-url
         val jsonObject: JSONObject = JSONObject(response!!.body().string())
         val jsonArrayList: JSONArray = jsonObject.getJSONArray("body")
 
@@ -83,19 +87,23 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         loadImgFromURL()
     }
 
+    //TODO 아이템을 추가로 load시 ScrollBar의 위치가 Top으로 이동하는 문제 해결
     override fun onPostExecute(result: Any?) {
         super.onPostExecute(result)
         val gridAdapte: GridViewAdapter =
-            GridViewAdapter(activity!!.applicationContext, R.layout.grid_item, GlobalVariable.mainImg, GlobalVariable.mainTitle, GlobalVariable.mainPrice)
+            GridViewAdapter(activity!!.applicationContext, R.layout.grid_item, GlobalVariable.mainImg, GlobalVariable.mainTitle, GlobalVariable.mainPrice, GlobalVariable.mainId)
 
         activity!!.myGridView.adapter = gridAdapte
     }
 }
 
 fun loadImgFromURL() {
+    GlobalVariable.mainImg.clear()
+    GlobalVariable.mainTitle.clear()
+    GlobalVariable.mainPrice.clear()
     Log.d("size:",GlobalVariable.cosmeticsArr.size.toString())
     for (i in 0 until GlobalVariable.cosmeticsArr.size) {
-        val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnail_image)
+        val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnailImage)
         val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
         conn.connect()
 
@@ -103,5 +111,6 @@ fun loadImgFromURL() {
         GlobalVariable.mainImg.add(BitmapFactory.decodeStream(inputStr))
         GlobalVariable.mainTitle.add(GlobalVariable.cosmeticsArr.get(i).title)
         GlobalVariable.mainPrice.add(GlobalVariable.cosmeticsArr.get(i).price)
+        GlobalVariable.mainId.add(GlobalVariable.cosmeticsArr.get(i).id)
     }
 }
