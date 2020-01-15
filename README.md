@@ -22,3 +22,4 @@ Asyctask의 생성자에 UI가 포함되는 Activity를 매개변수로 받아�
 https://krespo.net/176<br><br>
 AbsListView.OnScrollListener를 implement한 후 onScroll()와 onScrollStateChanged()를 overrid해서 사용한다.<br><br>
 
+* ScrollView안에 LinearLayout의 weight는 android:fillViewport="true"옵션을 추가하면 가능하다.
