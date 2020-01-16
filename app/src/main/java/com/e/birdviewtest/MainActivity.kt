@@ -3,12 +3,10 @@ package com.e.birdviewtest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
@@ -28,8 +26,12 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
 
         //TODO 아이템 클릭시 id값을 활용하여 Request. 결과값을 UI에 SHOW. | API SAMPLE : https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/250
         myGridView.setOnItemClickListener { adapterView, view, i, l ->
-//            val myItent: Intent = Intent(this, Cosmetics::class.java)
-//            startActivity(myItent)
+
+            LoadImgFromURL.loadMoreInfo(GlobalVariable.mainId.get(i))
+
+            val myItent: Intent = Intent(this, CosmeticInfo::class.java)
+            myItent.putExtra("CosmeticId", GlobalVariable.mainId.get(i))
+            startActivity(myItent)
 
             Toast.makeText(
                 applicationContext,

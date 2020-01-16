@@ -1,7 +1,6 @@
 package com.e.birdviewtest
 
 import android.app.Activity
-import android.graphics.BitmapFactory
 import android.os.AsyncTask
 import android.util.Log
 import okhttp3.OkHttpClient
@@ -10,9 +9,6 @@ import okhttp3.Response
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
-import java.io.InputStream
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
 
@@ -34,7 +30,6 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
         timeBuilder.writeTimeout(10000, TimeUnit.SECONDS)
         val client: OkHttpClient = timeBuilder.build()
-        client.connectTimeoutMillis()
         val request: Request = Request.Builder()
             .url("https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products?skin_type=${skinType}&page=${page}")
             .build()
@@ -58,7 +53,7 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         for (i in 0 until jsonArrayList.length()) {
             tempJsonObject = jsonArrayList.getJSONObject(i)
 
-            tempId = tempJsonObject.optString("id").toInt()
+            tempId = tempJsonObject.optInt("id")
             tempThumbnailImg = tempJsonObject.optString("thumbnail_image")
             tempTitle = tempJsonObject.optString("title")
             tempPrice = tempJsonObject.optString("price")
@@ -67,24 +62,24 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
                 "oily" -> {
                     val tempOily: Int = tempJsonObject.optString("oily_score").toInt()
                     tempCosmetics =
-                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, tempOily)
+                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, tempOily, -1, -1)
                 }
 
                 "dry" -> {
                     val tempDry: Int = tempJsonObject.optString("dry_score").toInt()
                     tempCosmetics =
-                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, tempDry)
+                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, -1,tempDry,-1)
                 }
 
                 "sensitive" -> {
                     val tempSensitive: Int = tempJsonObject.optString("sensitive_score").toInt()
                     tempCosmetics =
-                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, tempSensitive)
+                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, -1, -1, tempSensitive)
                 }
             }
             GlobalVariable.cosmeticsArr.add(tempCosmetics!!)
         }
-        loadImgFromURL()
+        LoadImgFromURL.loadImg()
     }
 
     //TODO 아이템을 추가로 load시 ScrollBar의 위치가 Top으로 이동하는 문제 해결
@@ -97,20 +92,20 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
     }
 }
 
-fun loadImgFromURL() {
-    GlobalVariable.mainImg.clear()
-    GlobalVariable.mainTitle.clear()
-    GlobalVariable.mainPrice.clear()
-    Log.d("size:",GlobalVariable.cosmeticsArr.size.toString())
-    for (i in 0 until GlobalVariable.cosmeticsArr.size) {
-        val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnailImage)
-        val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-        conn.connect()
-
-        val inputStr: InputStream = conn.inputStream
-        GlobalVariable.mainImg.add(BitmapFactory.decodeStream(inputStr))
-        GlobalVariable.mainTitle.add(GlobalVariable.cosmeticsArr.get(i).title)
-        GlobalVariable.mainPrice.add(GlobalVariable.cosmeticsArr.get(i).price)
-        GlobalVariable.mainId.add(GlobalVariable.cosmeticsArr.get(i).id)
-    }
-}
+//fun loadImgFromURL() {
+//    GlobalVariable.mainImg.clear()
+//    GlobalVariable.mainTitle.clear()
+//    GlobalVariable.mainPrice.clear()
+//    Log.d("size:",GlobalVariable.cosmeticsArr.size.toString())
+//    for (i in 0 until GlobalVariable.cosmeticsArr.size) {
+//        val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnailImage)
+//        val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
+//        conn.connect()
+//
+//        val inputStr: InputStream = conn.inputStream
+//        GlobalVariable.mainImg.add(BitmapFactory.decodeStream(inputStr))
+//        GlobalVariable.mainTitle.add(GlobalVariable.cosmeticsArr.get(i).title)
+//        GlobalVariable.mainPrice.add(GlobalVariable.cosmeticsArr.get(i).price)
+//        GlobalVariable.mainId.add(GlobalVariable.cosmeticsArr.get(i).id)
+//    }
+//}

@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.grid_item.view.*
 
 class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap>, _title : ArrayList<String>, _price : ArrayList<String>, _id : ArrayList<Int>) : BaseAdapter() {

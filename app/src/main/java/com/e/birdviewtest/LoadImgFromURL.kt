@@ -1,0 +1,101 @@
+package com.e.birdviewtest
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
+import java.io.InputStream
+import java.lang.Exception
+import java.net.URL
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.HttpsURLConnection
+
+class LoadImgFromURL {
+    companion object {
+        fun loadImg() {
+            GlobalVariable.mainImg.clear()
+            GlobalVariable.mainTitle.clear()
+            GlobalVariable.mainPrice.clear()
+            Log.d("size:", GlobalVariable.cosmeticsArr.size.toString())
+            for (i in 0 until GlobalVariable.cosmeticsArr.size) {
+                val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnailImage)
+                val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
+                conn.connect()
+
+                val inputStr: InputStream = conn.inputStream
+                GlobalVariable.mainImg.add(BitmapFactory.decodeStream(inputStr))
+                GlobalVariable.mainTitle.add(GlobalVariable.cosmeticsArr.get(i).title)
+                GlobalVariable.mainPrice.add(GlobalVariable.cosmeticsArr.get(i).price)
+                GlobalVariable.mainId.add(GlobalVariable.cosmeticsArr.get(i).id)
+            }
+        }
+
+        //TODO response가 null
+        fun loadMoreInfo(_id: Int) {
+            val str: String =
+                "https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/".plus(_id)
+
+            var timeBuilder: okhttp3.OkHttpClient.Builder = OkHttpClient.Builder()
+            timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
+            timeBuilder.writeTimeout(10000, TimeUnit.SECONDS)
+            val client: OkHttpClient = timeBuilder.build()
+
+            val request: Request = Request.Builder().url(str).build()
+            var response: Response? = null
+            try {
+                response = client.newCall(request).execute()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            val jsonObject: JSONObject = JSONObject(response!!.body().string())
+            val jsonArrayList: JSONArray = jsonObject.getJSONArray("body")
+
+            var tempId: Int
+            var tempFullImg: String
+            var tempTitle: String
+            var tempPrice: String
+            var tempDescription: String
+            var tempOily: Int
+            var tempDry: Int
+            var tempSensitive: Int
+
+            var tempCosmetics: Cosmetics?
+
+            var tempJsonObject: JSONObject = jsonArrayList.getJSONObject(0)
+            tempId = tempJsonObject.optInt("id")
+            tempFullImg = tempJsonObject.optString("full_size_image")
+            tempTitle = tempJsonObject.optString("title")
+            tempPrice = tempJsonObject.optString("price")
+            tempDescription = tempJsonObject.optString("description")
+            tempOily = tempJsonObject.optInt("oily_score")
+            tempDry = tempJsonObject.optInt("dry_score")
+            tempSensitive = tempJsonObject.optInt("sensitive_score")
+
+            GlobalVariable.cosmeticInfo = Cosmetics(
+                tempId,
+                tempFullImg,
+                tempTitle,
+                tempPrice,
+                tempDescription,
+                tempOily,
+                tempDry,
+                tempSensitive
+            )
+        }
+
+        fun loadFullImg(_tempFullImg: String) : Bitmap {
+            val url: URL = URL(GlobalVariable.cosmeticInfo.fullImage)
+            val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
+            conn.connect()
+
+            val inputStream: InputStream = conn.inputStream
+            return BitmapFactory.decodeStream(inputStream)
+        }
+    }
+}
