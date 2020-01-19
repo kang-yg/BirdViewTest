@@ -3,6 +3,8 @@ package com.e.birdviewtest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.widget.AbsListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +13,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
 
+    val getMoreInfoCode: Int = 1
+    var tempId : Int = -1
+
     var pageCount: Int = 1
     var gridItemVisibleFlag: Boolean = false
+    var myHandler: Handler? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,22 +29,42 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
 
         myGridView.setOnScrollListener(this)
 
-
-
-        //TODO 아이템 클릭시 id값을 활용하여 Request. 결과값을 UI에 SHOW. | API SAMPLE : https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/250
         myGridView.setOnItemClickListener { adapterView, view, i, l ->
-
-            LoadImgFromURL.loadMoreInfo(GlobalVariable.mainId.get(i))
-
+            tempId = GlobalVariable.mainId.get(i)
             val myItent: Intent = Intent(this, CosmeticInfo::class.java)
-            myItent.putExtra("CosmeticId", GlobalVariable.mainId.get(i))
-            startActivity(myItent)
+
+            myHandler = object : Handler() {
+                override fun handleMessage(msg: Message?) {
+                    when (msg!!.what) {
+                        getMoreInfoCode -> {
+                            startActivity(myItent)
+                        }
+                    }
+                }
+            }
+
+            GetMoreInfo().start()
 
             Toast.makeText(
                 applicationContext,
                 GlobalVariable.mainId.get(i).toString(),
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        GetMoreInfo().interrupt()
+    }
+
+    inner class GetMoreInfo : Thread() {
+        val myMessage: Message = myHandler!!.obtainMessage()
+        override fun run() {
+            myMessage.what = getMoreInfoCode
+            LoadImgFromURL.loadMoreInfo(tempId)
+
+            myHandler!!.sendMessage(myMessage)
         }
     }
 

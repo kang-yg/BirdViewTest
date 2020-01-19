@@ -35,7 +35,6 @@ class LoadImgFromURL {
             }
         }
 
-        //TODO response가 null
         fun loadMoreInfo(_id: Int) {
             val str: String =
                 "https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/".plus(_id)
@@ -44,7 +43,6 @@ class LoadImgFromURL {
             timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
             timeBuilder.writeTimeout(10000, TimeUnit.SECONDS)
             val client: OkHttpClient = timeBuilder.build()
-
             val request: Request = Request.Builder().url(str).build()
             var response: Response? = null
             try {
@@ -53,8 +51,7 @@ class LoadImgFromURL {
                 e.printStackTrace()
             }
 
-            val jsonObject: JSONObject = JSONObject(response!!.body().string())
-            val jsonArrayList: JSONArray = jsonObject.getJSONArray("body")
+            val jsonObject: JSONObject = JSONObject(response!!.body().string()).getJSONObject("body")
 
             var tempId: Int
             var tempFullImg: String
@@ -65,17 +62,14 @@ class LoadImgFromURL {
             var tempDry: Int
             var tempSensitive: Int
 
-            var tempCosmetics: Cosmetics?
-
-            var tempJsonObject: JSONObject = jsonArrayList.getJSONObject(0)
-            tempId = tempJsonObject.optInt("id")
-            tempFullImg = tempJsonObject.optString("full_size_image")
-            tempTitle = tempJsonObject.optString("title")
-            tempPrice = tempJsonObject.optString("price")
-            tempDescription = tempJsonObject.optString("description")
-            tempOily = tempJsonObject.optInt("oily_score")
-            tempDry = tempJsonObject.optInt("dry_score")
-            tempSensitive = tempJsonObject.optInt("sensitive_score")
+            tempId = jsonObject.getInt("id")
+            tempFullImg = jsonObject.getString("full_size_image")
+            tempTitle = jsonObject.getString("title")
+            tempPrice = jsonObject.getString("price")
+            tempDescription = jsonObject.getString("description")
+            tempOily = jsonObject.getInt("oily_score")
+            tempDry = jsonObject.getInt("dry_score")
+            tempSensitive = jsonObject.getInt("sensitive_score")
 
             GlobalVariable.cosmeticInfo = Cosmetics(
                 tempId,
@@ -87,9 +81,11 @@ class LoadImgFromURL {
                 tempDry,
                 tempSensitive
             )
+
+            Log.d("cosmeticInfo", "cosmeticInfo")
         }
 
-        fun loadFullImg(_tempFullImg: String) : Bitmap {
+        fun loadFullImg() : Bitmap {
             val url: URL = URL(GlobalVariable.cosmeticInfo.fullImage)
             val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
             conn.connect()

@@ -3,7 +3,7 @@ package com.e.birdviewtest
 class Cosmetics() {
     var id: Int = -1
     var thumbnailImage: String = ""
-    val fullImage: String = ""
+    var fullImage: String = ""
     var title: String = ""
     var price: String = ""
     var description: String = ""
@@ -40,7 +40,7 @@ class Cosmetics() {
         _sensitive_score: Int = -1
     ) : this() {
         this.id = _id
-        this.thumbnailImage = _fullImage
+        this.fullImage = _fullImage
         this.title = _title
         this.price = _price
         this.description = _description
