@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.widget.AbsListView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -51,6 +52,10 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
                 Toast.LENGTH_SHORT
             ).show()
         }
+
+        val spinnerAdapter : ArrayAdapter<String> = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, resources.getStringArray(R.array.mainSpinner) as Array<String>)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mainSpinner.adapter = spinnerAdapter
     }
 
     override fun onStop() {

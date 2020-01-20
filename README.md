@@ -60,5 +60,16 @@ https://recipes4dev.tistory.com/166 <br>
 ⓓ Object obj : 수신 스레드에 전달할 임의의 객체 저장.<br><br>
 
 [Message 메소드]<br>
-ⓐ Message obtainMessage() : 메시지의 target이 핸들러 자신으로 지정된 Message 객체 리턴
-ⓑMessage obtainMessage(int what) : what이 지정된 Message 객체 리턴.
+ⓐ Message obtainMessage() : 메시지의 target이 핸들러 자신으로 지정된 Message 객체 리턴<br>
+ⓑMessage obtainMessage(int what) : what이 지정된 Message 객체 리턴.<br><br>
+
+* strings.string-array이용한 Spinner
+    <string-array name="mainSpinner">
+        <item>Oily</item>
+        <item>Dry</item>
+        <item>Sensitive</item>
+    </string-array>
+
+    val spinnerAdapter : ArrayAdapter<String> = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, resources.getStringArray(R.array.mainSpinner) as Array<String>)<br>
+    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)<br>
+    mainSpinner.adapter = spinnerAdapter<br>

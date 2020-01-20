@@ -4,12 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10"
     tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <Spinner
+            android:id="@+id/mainSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </ScrollView>
 
     <GridView
         android:id="@+id/myGridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="2"/>
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:numColumns="2" />
 
 </LinearLayout>
