@@ -17,10 +17,12 @@ import javax.net.ssl.HttpsURLConnection
 
 class LoadImgFromURL {
     companion object {
+        //그리드뷰 아답터에 전달한 매개변수 정의
         fun loadImg() {
             GlobalVariable.mainImg.clear()
             GlobalVariable.mainTitle.clear()
             GlobalVariable.mainPrice.clear()
+            GlobalVariable.mainId.clear()
             Log.d("size:", GlobalVariable.cosmeticsArr.size.toString())
             for (i in 0 until GlobalVariable.cosmeticsArr.size) {
                 val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnailImage)
@@ -35,6 +37,7 @@ class LoadImgFromURL {
             }
         }
 
+        //그리드뷰 아이템 상세정보 가져오기
         fun loadMoreInfo(_id: Int) {
             val str: String =
                 "https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/".plus(_id)
@@ -85,6 +88,7 @@ class LoadImgFromURL {
             Log.d("cosmeticInfo", "cosmeticInfo")
         }
 
+        //그리드뷰 아이템 상세정보 이미지 가져오기
         fun loadFullImg() : Bitmap {
             val url: URL = URL(GlobalVariable.cosmeticInfo.fullImage)
             val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection

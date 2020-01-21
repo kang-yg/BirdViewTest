@@ -25,6 +25,7 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         Log.d("GetDataAsyctask", "GetDataAsyctask")
         var skinType: String = p0[0].toString()
         var page: Int = p0[1]!!.toInt()
+        var sort : Boolean = p0[2]!!.toBoolean()
 
         var timeBuilder : okhttp3.OkHttpClient.Builder = OkHttpClient.Builder()
         timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
@@ -79,7 +80,28 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
             }
             GlobalVariable.cosmeticsArr.add(tempCosmetics!!)
         }
-        LoadImgFromURL.loadImg()
+        when(sort){
+            true -> {
+                when(skinType){
+                    "oily" -> {
+                        GlobalVariable.cosmeticsArr.sortBy { it.oily_score }
+                        LoadImgFromURL.loadImg()
+                    }
+
+                    "dry" -> {
+                        GlobalVariable.cosmeticsArr.sortBy { it.dry_score }
+                        LoadImgFromURL.loadImg()
+                    }
+
+                    "sensitive" -> {
+                        GlobalVariable.cosmeticsArr.sortBy { it.sensitive_score }
+                        LoadImgFromURL.loadImg()
+                    }
+                }
+            }
+
+            else -> LoadImgFromURL.loadImg()
+        }
     }
 
     //TODO 아이템을 추가로 load시 ScrollBar의 위치가 Top으로 이동하는 문제 해결
@@ -91,21 +113,3 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         activity!!.myGridView.adapter = gridAdapte
     }
 }
-
-//fun loadImgFromURL() {
-//    GlobalVariable.mainImg.clear()
-//    GlobalVariable.mainTitle.clear()
-//    GlobalVariable.mainPrice.clear()
-//    Log.d("size:",GlobalVariable.cosmeticsArr.size.toString())
-//    for (i in 0 until GlobalVariable.cosmeticsArr.size) {
-//        val url: URL = URL(GlobalVariable.cosmeticsArr.get(i).thumbnailImage)
-//        val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-//        conn.connect()
-//
-//        val inputStr: InputStream = conn.inputStream
-//        GlobalVariable.mainImg.add(BitmapFactory.decodeStream(inputStr))
-//        GlobalVariable.mainTitle.add(GlobalVariable.cosmeticsArr.get(i).title)
-//        GlobalVariable.mainPrice.add(GlobalVariable.cosmeticsArr.get(i).price)
-//        GlobalVariable.mainId.add(GlobalVariable.cosmeticsArr.get(i).id)
-//    }
-//}

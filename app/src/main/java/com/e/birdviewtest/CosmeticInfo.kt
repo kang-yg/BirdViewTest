@@ -17,7 +17,6 @@ class CosmeticInfo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.cosmeic_info)
 
-        //TODO 세부정보 보여주는 작업
         myHandler = object : Handler() {
             override fun handleMessage(msg: Message) {
                 when (msg.what) {

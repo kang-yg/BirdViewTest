@@ -2,6 +2,7 @@
     <string name="app_name">BirdViewTest</string>
 
     <string-array name="mainSpinner">
+        <item>모든 피부 타입</item>
         <item>Oily</item>
         <item>Dry</item>
         <item>Sensitive</item>

@@ -22,16 +22,15 @@ Asyctask의 생성자에 UI가 포함되는 Activity를 매개변수로 받아�
 https://krespo.net/176<br><br>
 AbsListView.OnScrollListener를 implement한 후 onScroll()와 onScrollStateChanged()를 overrid해서 사용한다.<br><br>
 
-* ScrollView안에 LinearLayout의 weight는 android:fillViewport="true"옵션을 추가하면 가능하다.<br><br>
+* ScrollView안에 LinearLayout의 weight는 android:fillViewport="true"옵션을 추가하면 가능하다. - <cosmetic_info.xml 에서 사용><br><br>
 
-* 네트워크 작업을 메인 스레드와 분리시켜 비동기 처리 하지 않고 Activity를 전환시킬 경우 네트워크 관련 코드에서 NetworkOnMainThreadException이 아닌 NullPointException이 나올 수 있다.<br><br>
+* 네트워크 작업을 메인 스레드와 분리시켜 비동기 처리 하지 않고 Activity를 전환시킬 경우 네트워크 관련 코드에서 NetworkOnMainThreadException이 아닌 NullPointException이 나올 수 있다. - <MainActivity.kt에서 사용><br><br>
 
-* Handler & Tread<br>
+* Handler & Tread - <MainActivity.kt, CosmeticInfo.kt에서 사용><br>
 https://recipes4dev.tistory.com/166 <br>
 메시지 객체를 획득하기 위해서는 Handler의 obtainMessage() 메서드를 사용합니다. obtainMessage() 메서드는 글로벌 메시지 풀(Global Message Pool)로부터 메시지를 가져오는데, 정적(static)으로 생성된 재사용(recycled) 객체로 관리되기 때문에 new 키워드로 새로운 Message 인스턴스를 만드는 것보다 효율적이다.<br>
 
 ※ Message가 재사용 되면 "this message is already in use androidruntimeexception" 이 발생하게 된다. <br>
-
 
     myHandler = object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -63,7 +62,7 @@ https://recipes4dev.tistory.com/166 <br>
 ⓐ Message obtainMessage() : 메시지의 target이 핸들러 자신으로 지정된 Message 객체 리턴<br>
 ⓑMessage obtainMessage(int what) : what이 지정된 Message 객체 리턴.<br><br>
 
-* strings.string-array이용한 Spinner
+* strings.string-array이용한 Spinner - <MainActivity.kt에서 사용><br>
     <string-array name="mainSpinner">
         <item>Oily</item>
         <item>Dry</item>
@@ -73,3 +72,7 @@ https://recipes4dev.tistory.com/166 <br>
     val spinnerAdapter : ArrayAdapter<String> = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, resources.getStringArray(R.array.mainSpinner) as Array<String>)<br>
     spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)<br>
     mainSpinner.adapter = spinnerAdapter<br>
+    
+* ArrayLisy.sortBy() - <GetDataAsyctask.kt에서 사용><br>
+https://www.baeldung.com/kotlin-sort#2-sortby<br>
+GlobalVariable.cosmeticsArr.sortBy { it.dry_score }<br><br>
