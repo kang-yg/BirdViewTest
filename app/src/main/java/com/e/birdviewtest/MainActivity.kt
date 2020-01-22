@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
     var tempId: Int = -1
 
     var pageCount: Int = 1
-    var skinType : String = ""
+    var skinType: String = ""
     var gridItemVisibleFlag: Boolean = false
     var myHandler: Handler? = null
 
@@ -63,42 +63,47 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
         )
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mainSpinner.adapter = spinnerAdapter
-        mainSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        mainSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 //To change body of created functions use File | Settings | File Templates.
-                when(p2){
+                when (p2) {
                     1 -> {
                         pageCount = 1
                         skinType = "oily"
                         GlobalVariable.cosmeticsArr.clear()
-                        pageCount = callMyAsync(this@MainActivity, "oily", pageCount.toString(), true)
+                        pageCount =
+                            callMyAsync(this@MainActivity, "oily", pageCount.toString(), true)
                     }
 
                     2 -> {
                         pageCount = 1
                         skinType = "dry"
                         GlobalVariable.cosmeticsArr.clear()
-                        pageCount = callMyAsync(this@MainActivity, "dry", pageCount.toString(), true)
+                        pageCount =
+                            callMyAsync(this@MainActivity, "dry", pageCount.toString(), true)
                     }
 
                     3 -> {
                         pageCount = 1
                         skinType = "sensitive"
                         GlobalVariable.cosmeticsArr.clear()
-                        pageCount = callMyAsync(this@MainActivity, "sensitive", pageCount.toString(), true)
+                        pageCount =
+                            callMyAsync(this@MainActivity, "sensitive", pageCount.toString(), true)
                     }
                 }
             }
         }
-    }
 
-    override fun onStop() {
-        super.onStop()
-        GetMoreInfo().interrupt()
+        //TODO 클릭스 키패드 닫기
+        search_button.setOnClickListener { view ->
+            GlobalVariable.cosmeticsArr.clear()
+            callMyAsync(this, "oily", 1.toString(), false, search_edit.text.toString())
+        }
+
     }
 
     inner class GetMoreInfo : Thread() {
@@ -109,6 +114,11 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
 
             myHandler!!.sendMessage(myMessage)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        GetMoreInfo().interrupt()
     }
 
     override fun onScroll(
@@ -125,7 +135,7 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
     override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
         //To change body of created functions use File | Settings | File Templates.
         if (p1 == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && gridItemVisibleFlag) {
-            when(skinType){
+            when (skinType) {
                 "oily" -> {
                     pageCount = callMyAsync(this, "oily", pageCount.toString(), true)
                 }
@@ -146,9 +156,15 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
     }
 }
 
-fun callMyAsync(_activity: Activity, _skinType: String, _page: String, _sort: Boolean): Int {
+fun callMyAsync(
+    _activity: Activity,
+    _skinType: String,
+    _page: String,
+    _sort: Boolean,
+    _search: String? = null
+): Int {
     val myAsyctask: GetDataAsyctask = GetDataAsyctask(_activity)
-    myAsyctask.execute(_skinType, _page, _sort.toString())
+    myAsyctask.execute(_skinType, _page, _sort.toString(), _search)
 
     return _page.toInt() + 1
 }

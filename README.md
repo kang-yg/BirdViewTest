@@ -63,6 +63,7 @@ https://recipes4dev.tistory.com/166 <br>
 ⓑMessage obtainMessage(int what) : what이 지정된 Message 객체 리턴.<br><br>
 
 * strings.string-array이용한 Spinner - <MainActivity.kt에서 사용><br>
+https://arabiannight.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9CAndroid-arrays-xml-%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%8A%A4%ED%94%BC%EB%84%88-%EB%A7%8C%EB%93%A4%EA%B8%B0<br>
     <string-array name="mainSpinner">
         <item>Oily</item>
         <item>Dry</item>
@@ -76,3 +77,15 @@ https://recipes4dev.tistory.com/166 <br>
 * ArrayLisy.sortBy() - <GetDataAsyctask.kt에서 사용><br>
 https://www.baeldung.com/kotlin-sort#2-sortby<br>
 GlobalVariable.cosmeticsArr.sortBy { it.dry_score }<br><br>
+
+* EditText자동 포커스 해제<br>
+https://gogorchg.tistory.com/entry/Android-EditText-%EC%9E%90%EB%8F%99-%ED%8F%AC%EC%BB%A4%EC%8A%A4-%EC%A0%9C%EA%B1%B0<br>
+감싸고 있는 LinearLayout에 android:focusable="true"<br>
+android:focusableInTouchMode="true" 를 추가한다.<br><br>
+
+* URL인코딩 - <GetDataAsyctask.kt에서 사용><br>
+https://blog.naver.com/awesomedad/220748168859 <br>
+https://sacstory.tistory.com/entry/Java-URL-%ED%95%9C%EA%B8%80-%EC%9D%B8%EC%BD%94%EB%94%A9 <br>
+URL에 한글을 넣었더니 인코딩에 되어 URL이 의도치 않게 변하게 된다. 그러나 아래와 같이 디코드 해서 사용하면 된다.
+        var mySearchKey: String = p0[3].toString()
+        val forEncode : String = URLEncoder.encode(mySearchKey, "UTF-8")<br><br>

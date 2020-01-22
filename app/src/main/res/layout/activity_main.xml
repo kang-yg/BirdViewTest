@@ -8,17 +8,43 @@
     android:weightSum="10"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/serch_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/search_edit"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:inputType="text"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/search_button"
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
     <Spinner
+        android:visibility="gone"
         android:id="@+id/mainSpinner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1" />
 
     <GridView
         android:id="@+id/myGridView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_weight="8"
         android:numColumns="2" />
 
 </LinearLayout>
