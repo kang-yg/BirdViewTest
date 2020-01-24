@@ -1,12 +1,14 @@
 package com.e.birdviewtest
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.AbsListView
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -14,8 +16,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
-
 class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
+    //TODO 헤더 스크롤시 GONE
+    //TODO 아이템을 추가로 load시 ScrollBar의 위치가 Top으로 이동하는 문제 해결
+    //TODO 스크롤시 키보드 내리기
+    //TODO 500 에러 처리 & 검색결과 없을 시 처리 (response가 잘못된 경우)
 
     val getMoreInfoCode: Int = 1
     var tempId: Int = -1
@@ -42,11 +47,12 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
                     when (msg!!.what) {
                         getMoreInfoCode -> {
                             startActivity(myItent)
+                            main_progress.visibility = View.GONE
                         }
                     }
                 }
             }
-
+            main_progress.visibility = View.VISIBLE
             GetMoreInfo().start()
 
             Toast.makeText(
@@ -98,12 +104,17 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
             }
         }
 
-        //TODO 클릭스 키패드 닫기
-        search_button.setOnClickListener { view ->
-            GlobalVariable.cosmeticsArr.clear()
-            callMyAsync(this, "oily", 1.toString(), false, search_edit.text.toString())
+        val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        search_edit.setOnEditorActionListener { textView, i, keyEvent ->
+            when (i) {
+                EditorInfo.IME_ACTION_SEARCH -> {
+                    GlobalVariable.cosmeticsArr.clear()
+                    callMyAsync(this, "oily", 1.toString(), false, search_edit.text.toString())
+                    imm.hideSoftInputFromWindow(this.currentFocus.windowToken, 0)
+                }
+            }
+            return@setOnEditorActionListener true
         }
-
     }
 
     inner class GetMoreInfo : Thread() {
@@ -114,11 +125,6 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
 
             myHandler!!.sendMessage(myMessage)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        GetMoreInfo().interrupt()
     }
 
     override fun onScroll(

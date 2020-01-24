@@ -89,3 +89,18 @@ https://sacstory.tistory.com/entry/Java-URL-%ED%95%9C%EA%B8%80-%EC%9D%B8%EC%BD%9
 URL에 한글을 넣었더니 인코딩에 되어 URL이 의도치 않게 변하게 된다. 그러나 아래와 같이 디코드 해서 사용하면 된다.
         var mySearchKey: String = p0[3].toString()
         val forEncode : String = URLEncoder.encode(mySearchKey, "UTF-8")<br><br>
+
+* EditText 엔터동작<br>
+https://ktko.tistory.com/entry/EditText-%ED%82%A4%EB%B3%B4%EB%93%9C-Enter%EC%97%94%ED%84%B0-%ED%82%A4-%EB%B3%80%EA%B2%BD<br>
+
+* 키보드 내리기<br>
+https://blog.naver.com/PostView.nhn?blogId=gyeom__&logNo=220956750126&proxyReferer=https%3A%2F%2Fwww.google.com%2F<br>
+        val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager<br>
+        imm.hideSoftInputFromWindow(this.currentFocus.windowToken, 0)<br><br>
+
+* ProgressBar 화면 가운데 보여주기<br>
+https://www.androidly.net/327/android-progressbar-using-kotlin<br>
+RelativeLayout으로 감싸서 ProgressBar옵션으로 android:layout_centerInParent="true"설정하기<br><br>
+
+* 터치 제한하기<br>
+https://stackoverflow.com/a/36927858/12355451<br>

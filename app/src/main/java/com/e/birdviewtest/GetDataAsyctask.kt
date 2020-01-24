@@ -4,6 +4,8 @@ import android.app.Activity
 import android.os.AsyncTask
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
+import android.widget.Toast
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
@@ -22,7 +24,6 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         this.activity = _mainActivit
     }
 
-    //TODO 변수를 하나 더 받아서(search) null or empty가 아니면 request를 분기시켜서 호출 skinType을 empty로 만들어 Cosmetics객체 생성
     override fun doInBackground(vararg p0: String?) {
         //To change body of created functions use File | Settings | File Templates.
         Log.d("GetDataAsyctask", "GetDataAsyctask")
@@ -30,7 +31,7 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         var page: Int = p0[1]!!.toInt()
         var sort: Boolean = p0[2]!!.toBoolean()
         var mySearchKey: String = p0[3].toString()
-        val forEncode : String = URLEncoder.encode(mySearchKey, "UTF-8")
+        val forEncode: String = URLEncoder.encode(mySearchKey, "UTF-8")
 
         var timeBuilder: okhttp3.OkHttpClient.Builder = OkHttpClient.Builder()
         timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
@@ -128,11 +129,14 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         }
     }
 
-    //TODO 아이템을 추가로 load시 ScrollBar의 위치가 Top으로 이동하는 문제 해결
     override fun onPostExecute(result: Any?) {
         super.onPostExecute(result)
-        this.activity!!.serch_layout.visibility = View.VISIBLE
+        Log.d("onPostExecute", "onPostExecute")
+
+        this.activity!!.search_edit.visibility = View.VISIBLE
         this.activity!!.mainSpinner.visibility = View.VISIBLE
+        this.activity!!.main_progress.visibility = View.GONE
+        this.activity!!.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
         val gridAdapte: GridViewAdapter =
             GridViewAdapter(
@@ -145,5 +149,15 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
             )
 
         activity!!.myGridView.adapter = gridAdapte
+    }
+
+    override fun onPreExecute() {
+        super.onPreExecute()
+        Log.d("onPreExecute", "onPreExecute")
+        this.activity!!.main_progress.visibility = View.VISIBLE
+        this.activity!!.window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
     }
 }

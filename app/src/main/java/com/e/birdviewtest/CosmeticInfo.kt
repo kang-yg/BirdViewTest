@@ -33,11 +33,6 @@ class CosmeticInfo : AppCompatActivity() {
         GetFullImg().start()
     }
 
-    override fun onStop() {
-        super.onStop()
-        GetFullImg().interrupt()
-    }
-
     inner class GetFullImg : Thread() {
         val myMessage: Message = myHandler!!.obtainMessage()
         override fun run() {
