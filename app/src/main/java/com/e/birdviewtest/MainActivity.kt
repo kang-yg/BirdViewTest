@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -16,11 +17,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
-    //TODO 헤더 스크롤시 GONE
     //TODO 아이템을 추가로 load시 ScrollBar의 위치가 Top으로 이동하는 문제 해결
     //TODO 스크롤시 키보드 내리기
-    //TODO 500 에러 처리 & 검색결과 없을 시 처리 (response가 잘못된 경우)
+    //TODO 키보드 OPEN시 하얀 배경
+    //TODO 스피너 우측정렬
+    //TODO 테스트 리소스 제거
 
     val getMoreInfoCode: Int = 1
     var tempId: Int = -1
@@ -30,14 +33,15 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
     var gridItemVisibleFlag: Boolean = false
     var myHandler: Handler? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         pageCount = callMyAsync(this, "oily", pageCount.toString(), false)
 
+        //GridView스크롤 리스너
         myGridView.setOnScrollListener(this)
+        //세부정보
         myGridView.setOnItemClickListener { adapterView, view, i, l ->
             tempId = GlobalVariable.mainId.get(i)
             val myItent: Intent = Intent(this, CosmeticInfo::class.java)
@@ -62,13 +66,17 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
             ).show()
         }
 
+        //피부타입 스피너
         val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
             applicationContext,
             android.R.layout.simple_spinner_dropdown_item,
             resources.getStringArray(R.array.mainSpinner) as Array<String>
         )
+
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mainSpinner.adapter = spinnerAdapter
+
+        //피부타입 선택
         mainSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 //To change body of created functions use File | Settings | File Templates.
@@ -104,7 +112,9 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
             }
         }
 
-        val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        //검색 & 키보드 내리기
+        val imm: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         search_edit.setOnEditorActionListener { textView, i, keyEvent ->
             when (i) {
                 EditorInfo.IME_ACTION_SEARCH -> {
@@ -136,8 +146,20 @@ class MainActivity : AppCompatActivity(), AbsListView.OnScrollListener {
         //To change body of created functions use File | Settings | File Templates.
         gridItemVisibleFlag =
             (totalItemCount > 0) && (firstVisibleItem + visibleItemCount) >= totalItemCount
+
+        var currentFirstVisPos: Int = view!!.firstVisiblePosition
+        //Scroll down & up
+        if (GlobalVariable.mLastFirstVisibleItem > firstVisibleItem) {
+            Log.d("Scroll", "up")
+            mainSpinner.visibility = View.VISIBLE
+        } else if (GlobalVariable.mLastFirstVisibleItem < firstVisibleItem) {
+            Log.d("Scroll", "down")
+            mainSpinner.visibility = View.GONE
+        }
+        GlobalVariable.mLastFirstVisibleItem = firstVisibleItem
     }
 
+    //무한스크롤
     override fun onScrollStateChanged(p0: AbsListView?, p1: Int) {
         //To change body of created functions use File | Settings | File Templates.
         if (p1 == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && gridItemVisibleFlag) {

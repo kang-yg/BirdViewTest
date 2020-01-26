@@ -16,21 +16,23 @@
         android:layout_weight="1"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:hint="@string/main_search_edit"
         android:imeOptions="actionSearch"
         android:inputType="text"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <Spinner
         android:id="@+id/mainSpinner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
+        android:textAlignment="center"
         android:visibility="gone" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_weight="8.5"
         android:numColumns="2">
 
         <ProgressBar
@@ -39,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <GridView
             android:id="@+id/myGridView"
@@ -49,4 +51,4 @@
     </RelativeLayout>
 
 
-    </LinearLayout>
+</LinearLayout>

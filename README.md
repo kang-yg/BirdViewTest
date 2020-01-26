@@ -70,9 +70,9 @@ https://arabiannight.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%9
         <item>Sensitive</item>
     </string-array>
 
-    val spinnerAdapter : ArrayAdapter<String> = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, resources.getStringArray(R.array.mainSpinner) as Array<String>)<br>
-    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)<br>
-    mainSpinner.adapter = spinnerAdapter<br>
+    val spinnerAdapter : ArrayAdapter<String> = ArrayAdapter(applicationContext, android.R.layout.simple_spinner_dropdown_item, resources.getStringArray(R.array.mainSpinner) as Array<String>)
+    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+    mainSpinner.adapter = spinnerAdapter
     
 * ArrayLisy.sortBy() - <GetDataAsyctask.kt에서 사용><br>
 https://www.baeldung.com/kotlin-sort#2-sortby<br>
@@ -90,17 +90,35 @@ URL에 한글을 넣었더니 인코딩에 되어 URL이 의도치 않게 변하
         var mySearchKey: String = p0[3].toString()
         val forEncode : String = URLEncoder.encode(mySearchKey, "UTF-8")<br><br>
 
-* EditText 엔터동작<br>
+* EditText 엔터동작 - <MainActivity.kt에서 사용><br>
 https://ktko.tistory.com/entry/EditText-%ED%82%A4%EB%B3%B4%EB%93%9C-Enter%EC%97%94%ED%84%B0-%ED%82%A4-%EB%B3%80%EA%B2%BD<br>
 
-* 키보드 내리기<br>
+* 키보드 내리기 - <MainActivity.kt에서 사용><br>
 https://blog.naver.com/PostView.nhn?blogId=gyeom__&logNo=220956750126&proxyReferer=https%3A%2F%2Fwww.google.com%2F<br>
         val imm : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager<br>
         imm.hideSoftInputFromWindow(this.currentFocus.windowToken, 0)<br><br>
 
-* ProgressBar 화면 가운데 보여주기<br>
+* ProgressBar 화면 가운데 보여주기 - <MainActivity.kt, GetDataAsyctask.kt에서 사용><br>
 https://www.androidly.net/327/android-progressbar-using-kotlin<br>
 RelativeLayout으로 감싸서 ProgressBar옵션으로 android:layout_centerInParent="true"설정하기<br><br>
 
-* 터치 제한하기<br>
+* 터치 제한하기 - <MainActivity.kt에서 사용><br>
 https://stackoverflow.com/a/36927858/12355451<br>
+
+* 스크롤 Up & Down - <MainActivity.kt에서 사용><br>
+https://stackoverflow.com/a/24010554/12355451 <br>
+mLastFirstVisibleItem는 전역변수로 선언해 주어야 한다.<br>
+
+* JSON statusCode<br>
+val statusCode : Int = response.code <br>
+
+* Spinner entry정렬<br>
+https://www.android-examples.com/change-spinner-text-alignment-gravity-in-android-programmatically/ <br>
+아이템으로 사용할 TextView를 만들어서 아답터에 적용한다.<br>
+        val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
+            applicationContext,
+            R.layout.spinner_item,
+            resources.getStringArray(R.array.mainSpinner))
+
+        spinnerAdapter.setDropDownViewResource(R.layout.spinner_item)
+        mainSpinner.adapter = spinnerAdapter

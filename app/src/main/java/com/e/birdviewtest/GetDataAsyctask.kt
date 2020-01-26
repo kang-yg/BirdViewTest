@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit
 
 class GetDataAsyctask : AsyncTask<String, Any, Any> {
     var activity: Activity? = null
+    var statusCode : Int = 0
 
     constructor(_mainActivit: Activity) {
         this.activity = _mainActivit
@@ -54,84 +55,116 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
             e.printStackTrace()
         }
 
-        val jsonObject: JSONObject = JSONObject(response!!.body().string())
-        val jsonArrayList: JSONArray = jsonObject.getJSONArray("body")
+        statusCode = response!!.code()
+        Log.d("statusCode", response!!.code().toString())
 
-        var tempJsonObject: JSONObject
+        if (response!!.code() != 200) {
+            cancel(true)
+        } else {
+            val jsonObject: JSONObject = JSONObject(response!!.body().string())
+            val jsonArrayList: JSONArray = jsonObject.getJSONArray("body")
 
-        var tempId: Int
-        var tempThumbnailImg: String
-        var tempTitle: String
-        var tempPrice: String
-        var tempCosmetics: Cosmetics?
-        for (i in 0 until jsonArrayList.length()) {
-            tempJsonObject = jsonArrayList.getJSONObject(i)
+            var tempJsonObject: JSONObject
 
-            tempId = tempJsonObject.optInt("id")
-            tempThumbnailImg = tempJsonObject.optString("thumbnail_image")
-            tempTitle = tempJsonObject.optString("title")
-            tempPrice = tempJsonObject.optString("price")
-            tempCosmetics = null
-            when (skinType) {
-                "oily" -> {
-                    val tempOily: Int = tempJsonObject.optString("oily_score").toInt()
-                    tempCosmetics =
-                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, tempOily, -1, -1)
-                }
+            var tempId: Int
+            var tempThumbnailImg: String
+            var tempTitle: String
+            var tempPrice: String
+            var tempCosmetics: Cosmetics?
+            for (i in 0 until jsonArrayList.length()) {
+                tempJsonObject = jsonArrayList.getJSONObject(i)
 
-                "dry" -> {
-                    val tempDry: Int = tempJsonObject.optString("dry_score").toInt()
-                    tempCosmetics =
-                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, -1, tempDry, -1)
-                }
-
-                "sensitive" -> {
-                    val tempSensitive: Int = tempJsonObject.optString("sensitive_score").toInt()
-                    tempCosmetics =
-                        Cosmetics(
-                            tempId,
-                            tempThumbnailImg,
-                            tempTitle,
-                            tempPrice,
-                            -1,
-                            -1,
-                            tempSensitive
-                        )
-                }
-
-                else -> {
-                    Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, -1, -1, -1)
-                }
-            }
-            GlobalVariable.cosmeticsArr.add(tempCosmetics!!)
-        }
-        when (sort) {
-            true -> {
+                tempId = tempJsonObject.optInt("id")
+                tempThumbnailImg = tempJsonObject.optString("thumbnail_image")
+                tempTitle = tempJsonObject.optString("title")
+                tempPrice = tempJsonObject.optString("price")
+                tempCosmetics = null
                 when (skinType) {
                     "oily" -> {
-                        GlobalVariable.cosmeticsArr.sortBy { it.oily_score }
-                        LoadImgFromURL.loadImg()
+                        val tempOily: Int = tempJsonObject.optString("oily_score").toInt()
+                        tempCosmetics =
+                            Cosmetics(
+                                tempId,
+                                tempThumbnailImg,
+                                tempTitle,
+                                tempPrice,
+                                tempOily,
+                                -1,
+                                -1
+                            )
                     }
 
                     "dry" -> {
-                        GlobalVariable.cosmeticsArr.sortBy { it.dry_score }
-                        LoadImgFromURL.loadImg()
+                        val tempDry: Int = tempJsonObject.optString("dry_score").toInt()
+                        tempCosmetics =
+                            Cosmetics(
+                                tempId,
+                                tempThumbnailImg,
+                                tempTitle,
+                                tempPrice,
+                                -1,
+                                tempDry,
+                                -1
+                            )
                     }
 
                     "sensitive" -> {
-                        GlobalVariable.cosmeticsArr.sortBy { it.sensitive_score }
-                        LoadImgFromURL.loadImg()
+                        val tempSensitive: Int = tempJsonObject.optString("sensitive_score").toInt()
+                        tempCosmetics =
+                            Cosmetics(
+                                tempId,
+                                tempThumbnailImg,
+                                tempTitle,
+                                tempPrice,
+                                -1,
+                                -1,
+                                tempSensitive
+                            )
+                    }
+
+                    else -> {
+                        Cosmetics(tempId, tempThumbnailImg, tempTitle, tempPrice, -1, -1, -1)
                     }
                 }
+                GlobalVariable.cosmeticsArr.add(tempCosmetics!!)
             }
+            when (sort) {
+                true -> {
+                    when (skinType) {
+                        "oily" -> {
+                            GlobalVariable.cosmeticsArr.sortBy { it.oily_score }
+                            LoadImgFromURL.loadImg()
+                        }
 
-            else -> LoadImgFromURL.loadImg()
+                        "dry" -> {
+                            GlobalVariable.cosmeticsArr.sortBy { it.dry_score }
+                            LoadImgFromURL.loadImg()
+                        }
+
+                        "sensitive" -> {
+                            GlobalVariable.cosmeticsArr.sortBy { it.sensitive_score }
+                            LoadImgFromURL.loadImg()
+                        }
+                    }
+                }
+
+                else -> LoadImgFromURL.loadImg()
+            }
         }
+    }
+
+    override fun onCancelled() {
+        super.onCancelled()
+        Log.d("GetDataAsyctask", "onCancelled")
+        Log.d("GetDataAsyctask", "onCancelled : ".plus(statusCode.toString()))
+
+        activity!!.main_progress.visibility = View.GONE
+        Toast.makeText(activity!!, statusCode.toString().plus(activity!!.resources.getString(R.string.response_exception)), Toast.LENGTH_LONG).show()
     }
 
     override fun onPostExecute(result: Any?) {
         super.onPostExecute(result)
-        Log.d("onPostExecute", "onPostExecute")
+        Log.d("GetDataAsyctask", "onPostExecute")
 
         this.activity!!.search_edit.visibility = View.VISIBLE
         this.activity!!.mainSpinner.visibility = View.VISIBLE
@@ -153,7 +186,7 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
 
     override fun onPreExecute() {
         super.onPreExecute()
-        Log.d("onPreExecute", "onPreExecute")
+        Log.d("GetDataAsyctask", "onPreExecute")
         this.activity!!.main_progress.visibility = View.VISIBLE
         this.activity!!.window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,

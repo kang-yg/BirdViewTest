@@ -6,11 +6,13 @@ import android.graphics.Bitmap
 class GlobalVariable : Application() {
     companion object {
         var cosmeticsArr: ArrayList<Cosmetics> = arrayListOf()
-        var mainImg : ArrayList<Bitmap> = arrayListOf()
-        var mainTitle : ArrayList<String> = arrayListOf()
-        var mainPrice : ArrayList<String> = arrayListOf()
-        var mainId : ArrayList<Int> = arrayListOf()
+        var mainImg: ArrayList<Bitmap> = arrayListOf()
+        var mainTitle: ArrayList<String> = arrayListOf()
+        var mainPrice: ArrayList<String> = arrayListOf()
+        var mainId: ArrayList<Int> = arrayListOf()
 
-        var cosmeticInfo : Cosmetics = Cosmetics()
+        var cosmeticInfo: Cosmetics = Cosmetics()
+
+        var mLastFirstVisibleItem: Int = 0
     }
 }

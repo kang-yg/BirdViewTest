@@ -7,4 +7,8 @@
         <item>Dry</item>
         <item>Sensitive</item>
     </string-array>
+
+    <string name="main_search_edit">검색</string>
+
+    <string name="response_exception">Error!!</string>
 </resources>
