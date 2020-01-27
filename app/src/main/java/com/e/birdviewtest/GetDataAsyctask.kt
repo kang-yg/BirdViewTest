@@ -19,14 +19,13 @@ import java.util.concurrent.TimeUnit
 
 class GetDataAsyctask : AsyncTask<String, Any, Any> {
     var activity: Activity? = null
-    var statusCode : Int = 0
+    var statusCode: Int = 0
 
     constructor(_mainActivit: Activity) {
         this.activity = _mainActivit
     }
 
     override fun doInBackground(vararg p0: String?) {
-        //To change body of created functions use File | Settings | File Templates.
         Log.d("GetDataAsyctask", "GetDataAsyctask")
         var skinType: String = p0[0].toString()
         var page: Int = p0[1]!!.toInt()
@@ -159,7 +158,11 @@ class GetDataAsyctask : AsyncTask<String, Any, Any> {
         Log.d("GetDataAsyctask", "onCancelled : ".plus(statusCode.toString()))
 
         activity!!.main_progress.visibility = View.GONE
-        Toast.makeText(activity!!, statusCode.toString().plus(activity!!.resources.getString(R.string.response_exception)), Toast.LENGTH_LONG).show()
+        Toast.makeText(
+            activity!!,
+            statusCode.toString().plus(activity!!.resources.getString(R.string.response_exception)),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun onPostExecute(result: Any?) {

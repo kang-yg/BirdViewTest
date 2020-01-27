@@ -8,14 +8,21 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import kotlinx.android.synthetic.main.grid_item.view.*
 
-class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap>, _title : ArrayList<String>, _price : ArrayList<String>, _id : ArrayList<Int>) : BaseAdapter() {
-    lateinit var context : Context
-    var layout : Int = 0
-    lateinit var inf : LayoutInflater
-    lateinit var img : ArrayList<Bitmap>
-    lateinit var title : ArrayList<String>
-    lateinit var price : ArrayList<String>
-    lateinit var id : ArrayList<Int>
+class GridViewAdapter(
+    _context: Context,
+    _layout: Int,
+    _img: ArrayList<Bitmap>,
+    _title: ArrayList<String>,
+    _price: ArrayList<String>,
+    _id: ArrayList<Int>
+) : BaseAdapter() {
+    lateinit var context: Context
+    var layout: Int = 0
+    lateinit var inf: LayoutInflater
+    lateinit var img: ArrayList<Bitmap>
+    lateinit var title: ArrayList<String>
+    lateinit var price: ArrayList<String>
+    lateinit var id: ArrayList<Int>
 
 
     init {
@@ -29,10 +36,9 @@ class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        //To change body of created functions use File | Settings | File Templates.
-        var myconvertView : View? = null
-        if (myconvertView == null){
-            myconvertView = inf.inflate(layout,null)
+        var myconvertView: View? = null
+        if (myconvertView == null) {
+            myconvertView = inf.inflate(layout, null)
         }
         myconvertView!!.gridView_item_img.setImageBitmap(img.get(position))
         myconvertView!!.gridView_item_title.text = title.get(position)
@@ -42,17 +48,14 @@ class GridViewAdapter(_context : Context, _layout : Int, _img : ArrayList<Bitmap
     }
 
     override fun getItem(position: Int): Any {
-        //To change body of created functions use File | Settings | File Templates.
         return img[position]
     }
 
     override fun getItemId(position: Int): Long {
-        //To change body of created functions use File | Settings | File Templates.
         return position.toLong()
     }
 
     override fun getCount(): Int {
-        //To change body of created functions use File | Settings | File Templates.
         return img.size
     }
 

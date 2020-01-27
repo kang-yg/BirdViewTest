@@ -40,7 +40,9 @@ class LoadImgFromURL {
         //그리드뷰 아이템 상세정보 가져오기
         fun loadMoreInfo(_id: Int) {
             val str: String =
-                "https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/".plus(_id)
+                "https://6uqljnm1pb.execute-api.ap-northeast-2.amazonaws.com/prod/products/".plus(
+                    _id
+                )
 
             var timeBuilder: okhttp3.OkHttpClient.Builder = OkHttpClient.Builder()
             timeBuilder.readTimeout(10000, TimeUnit.SECONDS)
@@ -54,7 +56,8 @@ class LoadImgFromURL {
                 e.printStackTrace()
             }
 
-            val jsonObject: JSONObject = JSONObject(response!!.body().string()).getJSONObject("body")
+            val jsonObject: JSONObject =
+                JSONObject(response!!.body().string()).getJSONObject("body")
 
             var tempId: Int
             var tempFullImg: String
@@ -89,7 +92,7 @@ class LoadImgFromURL {
         }
 
         //그리드뷰 아이템 상세정보 이미지 가져오기
-        fun loadFullImg() : Bitmap {
+        fun loadFullImg(): Bitmap {
             val url: URL = URL(GlobalVariable.cosmeticInfo.fullImage)
             val conn: HttpsURLConnection = url.openConnection() as HttpsURLConnection
             conn.connect()
