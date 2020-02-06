@@ -1,3 +1,10 @@
+![KakaoTalk_20200206_135524911](https://user-images.githubusercontent.com/38394861/73907225-d87e7480-48e8-11ea-82cc-0d5bc01a308c.jpg)
+![KakaoTalk_20200206_135524911_01](https://user-images.githubusercontent.com/38394861/73907227-d9afa180-48e8-11ea-9a21-f43940e9b145.jpg)
+![KakaoTalk_20200206_135524911_02](https://user-images.githubusercontent.com/38394861/73907228-da483800-48e8-11ea-9527-d42956c5a39d.jpg)
+![KakaoTalk_20200206_135524911_03](https://user-images.githubusercontent.com/38394861/73907229-dae0ce80-48e8-11ea-87c9-20586cdc6c8c.jpg)
+![KakaoTalk_20200206_135524911_04](https://user-images.githubusercontent.com/38394861/73907230-dae0ce80-48e8-11ea-8a51-bb14f74aced5.jpg)
+
+
 * OkHttp - <GetDataAsyctask.kt에서 사용><br>
 https://stackoverflow.com/a/29680883/12355451<br>
 https://dpdpwl.tistory.com/23<br>
