@@ -1,8 +1,7 @@
 [동영상]<br>
 https://youtu.be/u3MjijhH1ME
 
-[사진]
-
+[사진]<br>
 ![KakaoTalk_20200206_135524911](https://user-images.githubusercontent.com/38394861/73907225-d87e7480-48e8-11ea-82cc-0d5bc01a308c.jpg)
 ![KakaoTalk_20200206_135524911_01](https://user-images.githubusercontent.com/38394861/73907227-d9afa180-48e8-11ea-9a21-f43940e9b145.jpg)
 ![KakaoTalk_20200206_135524911_02](https://user-images.githubusercontent.com/38394861/73907228-da483800-48e8-11ea-9527-d42956c5a39d.jpg)
